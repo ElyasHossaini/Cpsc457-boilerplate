@@ -1,0 +1,14 @@
+# @file mount_minix.wrap
+#
+# @author meevs
+# @date 2026-08-28
+
+[wrap-git]
+directory = minix_from_scratch
+url = https://github.com/o-oconnell/minixfromscratch.git
+patch_directory = minix_from_scratch
+revision = 0.0.2
+depth = 1
+
+[provide]
+program_names = mount_minix, umount_minix, start_minix

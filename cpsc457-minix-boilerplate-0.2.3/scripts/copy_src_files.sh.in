@@ -1,0 +1,9 @@
+#! /usr/bin/sh
+# @file copy_src_files.sh.in
+#
+# @author meevs
+# @date 2026-08-30
+
+@MOUNT_VM_CMD@
+sudo cp --recursive @SRC_FILES_DIR@ @MOUNT_DIR@
+@UMOUNT_VM_CMD@

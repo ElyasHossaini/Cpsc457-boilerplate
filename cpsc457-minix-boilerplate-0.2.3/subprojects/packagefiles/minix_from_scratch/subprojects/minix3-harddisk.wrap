@@ -1,0 +1,13 @@
+# @file minix3-harddisk.wrap
+#
+# @author meevs
+# @date 2026-08-28
+
+[wrap-file]
+source_url = https://github.com/o-oconnell/minixfromscratch/releases/download/0.0.1/minix3.1.0-book-version-harddisk.img.zip
+source_filename = minix3.1.0-book-version-harddisk.img.zip
+source_hash = 70dd61a264b1e03f21a5b8cf48ea2539f7812b234564d10b47d75dceb5e7a6fa
+
+lead_directory_missing = true
+
+patch_directory = minix3-harddisk
