@@ -645,9 +645,11 @@ struct proc *rp;		/* this process is no longer runnable */
 }
 
 PRIVATE void fcfs_sched (struct proc *rp, int *front) {
-	
-	/* <<TODO>> */
-
+    /* Keep the running process first when its clock quantum expires.
+     * New or unblocked processes join the tail of their priority queue.
+     */
+    *front = (rp->p_ticks_left <= 0);
+    rp->p_ticks_left = rp->p_quantum_size;
 }
 
 PRIVATE void rr_sched (struct proc *rp, int *front) {
