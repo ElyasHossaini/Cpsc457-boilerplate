@@ -660,7 +660,17 @@ PRIVATE void rr_sched (struct proc *rp, int *front) {
 }
 
 PRIVATE void mlfq_sched (struct proc *rp, int *queue, int *front) {
-
-	/* <<TODO>> */
-
+    /* CPU-bound processes move down one queue after using a full quantum.
+     * Processes that block early move back toward their original priority.
+     * Queue 15 belongs to IDLE and must not contain ordinary processes.
+     */
+    *front = (rp->p_ticks_left > 0);
+    if (!*front) {
+        rp->p_ticks_left = rp->p_quantum_size;
+        if (rp->p_priority < MIN_USER_Q)
+            ++rp->p_priority;
+    } else if (rp->p_priority > rp->p_max_priority) {
+        --rp->p_priority;
+    }
+    *queue = rp->p_priority;
 }
