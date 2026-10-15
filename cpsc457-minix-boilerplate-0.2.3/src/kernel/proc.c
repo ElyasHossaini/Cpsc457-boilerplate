@@ -653,9 +653,10 @@ PRIVATE void fcfs_sched (struct proc *rp, int *front) {
 }
 
 PRIVATE void rr_sched (struct proc *rp, int *front) {
-	
-	/* <<TODO>> */
-
+    /* Finish an unused quantum; rotate to the tail after consuming it. */
+    *front = (rp->p_ticks_left > 0);
+    if (!*front)
+        rp->p_ticks_left = rp->p_quantum_size;
 }
 
 PRIVATE void mlfq_sched (struct proc *rp, int *queue, int *front) {
