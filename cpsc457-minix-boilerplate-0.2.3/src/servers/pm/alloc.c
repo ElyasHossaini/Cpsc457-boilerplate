@@ -164,7 +164,7 @@ phys_clicks clicks;		/* amount of memory requested */
 	phys_clicks base_addr = NO_MEM;
 
 #if PRINT_HOLE_LIST
-	printf ("Attempting to allocate %dKB...\n", clicks);
+	printf ("Attempting to allocate %lu clicks...\n", (unsigned long) clicks);
 	/* Dump out the current state of holes. */
 	print_available_holes ();
 #endif /* PRINT_HOLE_LIST */
@@ -184,7 +184,7 @@ phys_clicks clicks;		/* amount of memory requested */
 	}
 
 #if PRINT_HOLE_LIST
-	printf ("Allocated at 0x%p.\n", base_addr);
+	printf ("Allocated at click 0x%lx.\n", (unsigned long) base_addr);
 #endif /* PRINT_HOLE_LIST */
 
 	return base_addr;
@@ -234,7 +234,8 @@ PUBLIC void print_available_holes () {
   register struct hole *hp = hole_head;
 
   while (hp != NULL) {
-	printf ("|0x%p (%dKB)| -> ", hp->h_base, hp->h_len);
+	printf ("|0x%lx (%lu clicks)| -> ",
+		(unsigned long) hp->h_base, (unsigned long) hp->h_len);
 	hp = hp->h_next;
   }
   printf ("NULL\n");
