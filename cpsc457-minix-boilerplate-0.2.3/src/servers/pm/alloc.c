@@ -127,7 +127,29 @@ phys_clicks clicks;
 	register struct hole *worst_hole, *prev_worst_hole;
 	phys_clicks old_base;
 
-	/* <<TODO>> */
+	do {
+		worst_hole = NIL_HOLE;
+		prev_worst_hole = NIL_HOLE;
+		prev_ptr = NIL_HOLE;
+		/* Inspect every physical-memory hole; keep the first on equal sizes. */
+		for (hp = hole_head; hp != NIL_HOLE && hp->h_base < swap_base;
+		     prev_ptr = hp, hp = hp->h_next) {
+			if (hp->h_len >= clicks &&
+			    (worst_hole == NIL_HOLE || hp->h_len > worst_hole->h_len)) {
+				worst_hole = hp;
+				prev_worst_hole = prev_ptr;
+			}
+		}
+
+		if (worst_hole != NIL_HOLE) {
+			old_base = worst_hole->h_base;
+			worst_hole->h_base += clicks;
+			worst_hole->h_len -= clicks;
+			/* Return an exhausted hole's table entry to the free-slot list. */
+			if (worst_hole->h_len == 0) del_slot(prev_worst_hole, worst_hole);
+			return(old_base);
+		}
+	} while (swap_out());
 
 	/* Failed to find sufficient memory. */
 	return (NO_MEM);
