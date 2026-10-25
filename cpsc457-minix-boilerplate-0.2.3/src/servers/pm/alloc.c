@@ -87,7 +87,31 @@ phys_clicks clicks;
 	register struct hole *best_hole, *prev_best_hole;
 	phys_clicks old_base;
 
-	/* <<TODO>> */
+	do {
+		best_hole = NIL_HOLE;
+		prev_best_hole = NIL_HOLE;
+		prev_ptr = NIL_HOLE;
+		/* Keep the first smallest suitable hole, excluding swap space. */
+		for (hp = hole_head; hp != NIL_HOLE && hp->h_base < swap_base;
+		     prev_ptr = hp, hp = hp->h_next) {
+			if (hp->h_len >= clicks &&
+			    (best_hole == NIL_HOLE || hp->h_len < best_hole->h_len)) {
+				best_hole = hp;
+				prev_best_hole = prev_ptr;
+				/* No smaller usable hole can improve an exact fit. */
+				if (hp->h_len == clicks) break;
+			}
+		}
+
+		if (best_hole != NIL_HOLE) {
+			old_base = best_hole->h_base;
+			best_hole->h_base += clicks;
+			best_hole->h_len -= clicks;
+			/* Unlink using the selected hole's predecessor, not the last one. */
+			if (best_hole->h_len == 0) del_slot(prev_best_hole, best_hole);
+			return(old_base);
+		}
+	} while (swap_out());
 
 	/* Failed to find sufficient memory. */
 	return (NO_MEM);
