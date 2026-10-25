@@ -41,7 +41,7 @@ enum ALLOC_ALG {
 	WORST_FIT_ALLOC_ALG
 };
 
-const enum ALLOC_ALG ALLOC_ALG = FIRST_FIT_ALLOC_ALG;
+const enum ALLOC_ALG ALLOC_ALG = BEST_FIT_ALLOC_ALG;
 
 PRIVATE struct hole {
   struct hole *h_next;		/* pointer to next entry on the list */
